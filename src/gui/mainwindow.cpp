@@ -1,12 +1,13 @@
 /*mian window*/
 #include <QtGui>
 #include "mainwindow.h"
+#include "viewer.h"
+#include "highgui.h"
 
 MainWindow::MainWindow()
  {
-    
-//    MoviePlayer *player = new MoviePlayer(this);
-//    setCentralWidget(player);
+    Viewer *player = new Viewer(this);
+    setCentralWidget(player);
     createActions();
     createMenus();
     createToolBars();
@@ -109,14 +110,13 @@ void MainWindow::createStatusBar()
 void MainWindow::loadFile(const QString &fileName)
  { 
     
-    /*CvCapture * camera = cvCaptureFromAVI(fileName.toUtf8());
+    CvCapture * camera = cvCaptureFromAVI(fileName.toUtf8());
     assert(camera);
-    IplImage * image=cvQueryFrame(camera);
-    assert(image);
-    VideoWindow *videoWin = new VideoWindow(camera);
-    center=videoWin;
-    this->setCentralWidget(videoWin);
-    statusBar()->showMessage(tr("file loaded"), 2000);*/
+    IplImage * frame=cvQueryFrame(camera);
+    assert(frame);
+	
+	player->setIplImage(frame);
+    statusBar()->showMessage(tr("file loaded"), 2000);
 } 
 
 QString MainWindow::strippedName(const QString &fullFileName)

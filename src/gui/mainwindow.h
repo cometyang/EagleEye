@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <string>
 #include <iostream>
-//#include "movieplayer.h"
+#include "viewer.h"
 using namespace std;
 
 QT_BEGIN_NAMESPACE
@@ -38,10 +38,12 @@ private:
     void createStatusBar();
   
     void loadFile(const QString &fileName);
-  
+
+
+
     QString strippedName(const QString &fullFileName);
 
-  //  MoviePlayer *player;
+    Viewer *player;
     QString curFile;
 
     QMenu *fileMenu;
