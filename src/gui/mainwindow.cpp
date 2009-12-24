@@ -1,12 +1,12 @@
 /*mian window*/
 #include <QtGui>
 #include "mainwindow.h"
-#include "viewer.h"
+#include "movieviewer.h"
 #include "highgui.h"
 
 MainWindow::MainWindow()
  {
-    Viewer *player = new Viewer(this);
+    player = new MovieViewer(this);
     setCentralWidget(player);
     createActions();
     createMenus();

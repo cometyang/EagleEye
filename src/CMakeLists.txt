@@ -20,7 +20,7 @@ set(EagleEye_SRCS
 	
 	# gui source
 	gui/mainwindow.cpp
-	gui/viewer.cpp
+	gui/movieviewer.cpp
 	#gui/movieplayer.cpp
 	#gui/cvmovielabel.cpp 
 	
@@ -39,7 +39,7 @@ set(EagleEye_MOCS
     #gui/cvmovielabel.h
 	# gui header
 	gui/mainwindow.h
-	gui/viewer.h
+	gui/movieviewer.h
 	
 	)
 
