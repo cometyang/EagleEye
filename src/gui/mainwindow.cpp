@@ -13,7 +13,7 @@ MainWindow::MainWindow()
     createToolBars();
     createStatusBar();
     setWindowTitle(tr("Movie Player"));
-    resize(800, 800);
+    resize(200, 300);
    
 }
 void MainWindow::closeEvent(QCloseEvent *event)

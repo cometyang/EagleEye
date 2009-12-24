@@ -4,11 +4,19 @@
 #include <iostream>
 
 #include <QWidget>
-#include <QPixmap>
-#include <QLabel>
-#include <QImage>
-#include <QVBoxLayout>
 
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QImage;
+class QPixmap;
+class QCheckBox;
+class QGridLayout;
+class QHBoxLayout;
+class QSlider;
+class QSpinBox;
+class QToolButton;
+class QVBoxLayout;
+QT_END_NAMESPACE
 
 #include <cv.h>
 
@@ -21,13 +29,35 @@ class MovieViewer : public QWidget
     
 	public:
 		MovieViewer(QWidget *parent=0);
+		enum MovieState 
+		{ 
+			NotRunning,
+			Paused,
+			Running
+		}; 
     
 	public slots:
-		void setIplImage(IplImage*);
+		void setIplImage(IplImage* frame);
+		void updateViewer(bool updating);
 	
 	private:
-		QVBoxLayout *mainLayout;
+		
+		void openFile(const QString &fileName);
+        void createControls();
+        void createButtons();
+		
 		QLabel *movieLabel;
+		QSlider *frameSlider;
+         
+		QToolButton *openButton;
+        QToolButton *playButton;
+        QToolButton *pauseButton;
+        QToolButton *stopButton;
+        QToolButton *quitButton;
+
+		QGridLayout *controlsLayout;
+		QHBoxLayout *buttonsLayout;
+		QVBoxLayout *mainLayout;
 	
 };
 
