@@ -112,10 +112,11 @@ void MainWindow::loadFile(const QString &fileName)
     
     CvCapture * camera = cvCaptureFromAVI(fileName.toUtf8());
     assert(camera);
-    IplImage * frame=cvQueryFrame(camera);
-    assert(frame);
-	
-	player->setIplImage(frame);
+    CvFrameSource* source = &CvFrameSource(camera);
+    //IplImage * frame=cvQueryFrame(camera);
+    //assert(frame);
+	player->showFrame(source);
+	//playe->setIplImage(frame);
     statusBar()->showMessage(tr("file loaded"), 2000);
 } 
 

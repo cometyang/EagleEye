@@ -23,13 +23,9 @@ MovieViewer::MovieViewer(QWidget* parent)
 }
  
 void
-MovieViewer::setIplImage(IplImage *BGRImage)
+MovieViewer::showFrame(IFrameSource* source)
 {
-	IplImage* RGBImage=cvCreateImage(cvGetSize(BGRImage), BGRImage->depth, BGRImage->nChannels);
-    cvCvtColor(BGRImage, RGBImage, CV_BGR2RGB);
-    QImage qimage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_RGB888);
-    movieLabel->setPixmap(QPixmap::fromImage(qimage));
-    cvReleaseImage(&RGBImage);
+	movieLabel->setPixmap(*(source->next()));
 }
  
 void 

@@ -5,6 +5,8 @@
 
 #include <QWidget>
 
+#include "../core/cvframesource.h"
+
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QImage;
@@ -40,7 +42,7 @@ class MovieViewer : public QWidget
 		void setState(ViewerState newState);
 
 	public slots:
-		void setIplImage(IplImage* frame);
+		void showFrame(IFrameSource*);
 		void updateViewer(bool updating);
 
 	signals:

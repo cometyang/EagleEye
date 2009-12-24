@@ -1,6 +1,6 @@
 #include "cvframesource.h"
 
-CvFrameSource::CvFrameSource(CvCapture* capture)
+CvFrameSource::CvFrameSource(CvCapture* capture) : IFrameSource()
 {
       sourceCapture=capture;
 	  nextFrame=cvQueryFrame(sourceCapture);
