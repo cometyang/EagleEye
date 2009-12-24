@@ -8,6 +8,7 @@
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QImage;
+class QTimer;
 class QPixmap;
 class QCheckBox;
 class QGridLayout;
@@ -29,25 +30,38 @@ class MovieViewer : public QWidget
     
 	public:
 		MovieViewer(QWidget *parent=0);
-		enum MovieState 
+		enum ViewerState 
 		{ 
 			NotRunning,
 			Paused,
 			Running
 		}; 
-    
+        
+		void setState(ViewerState newState);
+
 	public slots:
 		void setIplImage(IplImage* frame);
 		void updateViewer(bool updating);
+
+	signals:
+		void started();
+		void updatedPlayer(const QPixmap&);
+		void updatedDetector(const QPixmap&);
+		void stateChanged(ViewerState);
+		void finished();
+		void frameChanged(int);
+		void threshholdChanged(int);
 	
 	private:
 		
 		void openFile(const QString &fileName);
         void createControls();
-        void createButtons();
-		
+
 		QLabel *movieLabel;
 		QSlider *frameSlider;
+
+		ViewerState currentState;
+		QTimer* viewerTimer;
          
 		QToolButton *openButton;
         QToolButton *playButton;
@@ -55,10 +69,11 @@ class MovieViewer : public QWidget
         QToolButton *stopButton;
         QToolButton *quitButton;
 
-		QGridLayout *controlsLayout;
+		QHBoxLayout *frameSliderLayout;
 		QHBoxLayout *buttonsLayout;
+		QVBoxLayout *controlsLayout;
+		
 		QVBoxLayout *mainLayout;
 	
 };
-
 #endif

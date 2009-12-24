@@ -16,7 +16,8 @@ ENDIF(WIN32)
 set(EagleEye_SRCS 
     main.cpp
 	# core source
-	#core/sample1.cc
+	core/cvframesource.cpp
+	
 	
 	# gui source
 	gui/mainwindow.cpp
@@ -33,7 +34,8 @@ set(EagleEye_SRCS
 
 set(EagleEye_MOCS
     # core header
-	# core/sample1.h
+	core/iframesource.h
+	core/cvframesource.cpp
 	#gui/movieplayer.h
 	#core/cvmovie.h
     #gui/cvmovielabel.h

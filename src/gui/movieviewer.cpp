@@ -10,27 +10,27 @@ MovieViewer::MovieViewer(QWidget* parent)
     movieLabel->setBackgroundRole(QPalette::Dark);
     movieLabel->setAutoFillBackground(true);
    
-    createControls();
-    createButtons();
-
-   
+	currentState=MovieViewer::NotRunning;
+	
+	
+	createControls();
+    
 	mainLayout = new QVBoxLayout;
     mainLayout->addWidget(movieLabel);
 	mainLayout->addLayout(controlsLayout);
-    mainLayout->addLayout(buttonsLayout);
 	setLayout(mainLayout);
 	
 }
  
- void
- MovieViewer::setIplImage(IplImage *BGRImage)
- {
+void
+MovieViewer::setIplImage(IplImage *BGRImage)
+{
 	IplImage* RGBImage=cvCreateImage(cvGetSize(BGRImage), BGRImage->depth, BGRImage->nChannels);
     cvCvtColor(BGRImage, RGBImage, CV_BGR2RGB);
     QImage qimage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_RGB888);
     movieLabel->setPixmap(QPixmap::fromImage(qimage));
     cvReleaseImage(&RGBImage);
- }
+}
  
 void 
 MovieViewer::updateViewer(bool updating)
@@ -63,9 +63,27 @@ MovieViewer::updateViewer(bool updating)
     // }
 } 
 
-void MovieViewer::createButtons()
+void 
+MovieViewer::setState(ViewerState newState) 
 {
-    QSize iconSize(16, 16);
+	if (newState != currentState) 
+	{
+		currentState = newState;
+		emit stateChanged(newState);
+	}
+} 
+
+void 
+MovieViewer::createControls()
+{
+    frameSlider = new QSlider(Qt::Horizontal);
+    frameSlider->setTickPosition(QSlider::TicksBelow);
+    frameSlider->setTickInterval(5);
+
+    frameSliderLayout = new QHBoxLayout;
+    frameSliderLayout->addWidget(frameSlider);
+	
+	QSize iconSize(16, 16);
 
     openButton = new QToolButton;
     openButton->setIcon(style()->standardIcon(QStyle::SP_DialogOpenButton));
@@ -77,7 +95,7 @@ void MovieViewer::createButtons()
     playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     playButton->setIconSize(iconSize);
     playButton->setToolTip(tr("Play"));
-  //  connect(playButton, SIGNAL(clicked()), movie, SLOT(start()));
+  //  connect(playButton, SIGNAL(clicked()), this, SLOT(start()));
 
     pauseButton = new QToolButton;
     pauseButton->setCheckable(true);
@@ -106,17 +124,8 @@ void MovieViewer::createButtons()
     buttonsLayout->addWidget(stopButton);
     buttonsLayout->addWidget(quitButton);
     buttonsLayout->addStretch();
+
+	controlsLayout = new QVBoxLayout;
+	controlsLayout->addLayout(frameSliderLayout);
+	controlsLayout->addLayout(buttonsLayout);
 }
-
-void MovieViewer::createControls()
-{
-   
-    frameSlider = new QSlider(Qt::Horizontal);
-    frameSlider->setTickPosition(QSlider::TicksBelow);
-    frameSlider->setTickInterval(5);
-
-    controlsLayout = new QGridLayout;
-    controlsLayout->addWidget(frameSlider, 1, 0, 1, 6);
-   
-}
-
