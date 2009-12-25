@@ -12,7 +12,10 @@ MovieViewer::MovieViewer(QWidget* parent)
    
 	currentState=MovieViewer::NotRunning;
 	
+	viewerTimer = new QTimer(this);
+    viewerTimer->setSingleShot(true);
 	
+
 	createControls();
     
 	mainLayout = new QVBoxLayout;
@@ -27,13 +30,76 @@ MovieViewer::showFrame(const QPixmap& showQPixmap)
 {
 	movieLabel->setPixmap(showQPixmap);
 }
- 
+
+void
+MovieViewer::setSource(IFrameSource* source)
+{
+	viewerSource=source;
+	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
+}
+void
+MovieViewer::setSource(const QString& filename)
+{
+	CvCapture * camera = cvCaptureFromAVI(filename.toUtf8());
+    assert(camera);
+    viewerSource =new CvFrameSource(camera);
+	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
+}
+
+void 
+MovieViewer::setState(ViewerState newState) 
+{
+	if (newState != currentState) 
+	{
+		currentState = newState;
+		emit stateChanged(newState);
+	}
+} 
+
+void 
+MovieViewer::setPaused(bool paused)
+{  
+     if (paused) 
+	 {
+		 if (currentState == MovieViewer::NotRunning)
+            return;
+        setState(Paused);
+        viewerTimer->stop();
+	 } else 
+	 {
+        if (currentState == MovieViewer::Running)
+            return;
+        setState(MovieViewer::Running);
+        viewerTimer->start(10);
+     }
+}  
+
+void 
+MovieViewer::start()
+{ 
+  	connect(viewerTimer, SIGNAL(timeout()), this, SLOT(queryNextFrame()));
+	if (currentState == MovieViewer::NotRunning) 
+	{
+		viewerTimer->start(10);
+
+    } else if (currentState == MovieViewer::Paused) 
+	{
+        setPaused(false);
+    }
+} 
+
+void
+MovieViewer::queryNextFrame()
+{
+	viewerSource->next();
+    viewerTimer->start(10);
+}
 void 
 MovieViewer::updateViewer(bool updating)
 { 
-    // if (next()) {
-	// if (updating && viewerState == MovieViewer::NotRunning) {
-            // enterState(CvMovie::Running);
+	//if (next()) {
+	//	if (updating && viewerState == MovieViewer::NotRunning) {
+      //      enterState(CvMovie::Running);
             // emit started();
         // }
 
@@ -59,15 +125,6 @@ MovieViewer::updateViewer(bool updating)
     // }
 } 
 
-void 
-MovieViewer::setState(ViewerState newState) 
-{
-	if (newState != currentState) 
-	{
-		currentState = newState;
-		emit stateChanged(newState);
-	}
-} 
 
 void 
 MovieViewer::createControls()
@@ -91,7 +148,7 @@ MovieViewer::createControls()
     playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
     playButton->setIconSize(iconSize);
     playButton->setToolTip(tr("Play"));
-  //  connect(playButton, SIGNAL(clicked()), this, SLOT(start()));
+    connect(playButton, SIGNAL(clicked()), this, SLOT(start()));
 
     pauseButton = new QToolButton;
     pauseButton->setCheckable(true);

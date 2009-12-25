@@ -40,10 +40,15 @@ class MovieViewer : public QWidget
 		}; 
         
 		void setState(ViewerState newState);
+		void setSource(const QString &fileName);
+		void setSource(IFrameSource*);
 
 	public slots:
 		void showFrame(const QPixmap&);
 		void updateViewer(bool updating);
+		void start();
+		void setPaused(bool);
+		void queryNextFrame();
 
 	signals:
 		void started();
@@ -56,8 +61,10 @@ class MovieViewer : public QWidget
 	
 	private:
 		
-		void openFile(const QString &fileName);
+		
         void createControls();
+
+		IFrameSource* viewerSource;
 
 		QLabel *movieLabel;
 		QSlider *frameSlider;

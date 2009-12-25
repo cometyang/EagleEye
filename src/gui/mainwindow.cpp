@@ -107,17 +107,9 @@ void MainWindow::createStatusBar()
     statusBar()->showMessage(tr("Ready"));
 } 
 
-void MainWindow::loadFile(const QString &fileName)
+void MainWindow::loadFile(const QString &filename)
  { 
-    
-    CvCapture * camera = cvCaptureFromAVI(fileName.toUtf8());
-    assert(camera);
-    CvFrameSource* source =new CvFrameSource(camera);
-    //IplImage * frame=cvQueryFrame(camera);
-    //assert(frame);
-	connect(source, SIGNAL(updated(const QPixmap&)), player, SLOT(showFrame(const QPixmap&)));
-	source->next();
-	//playe->setIplImage(frame);
+    player->setSource(filename);
     statusBar()->showMessage(tr("file loaded"), 2000);
 } 
 

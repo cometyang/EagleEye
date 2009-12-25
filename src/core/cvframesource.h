@@ -10,7 +10,7 @@ class CvFrameSource : public IFrameSource
 {
     public:
 	    CvFrameSource(CvCapture*);
-		void setCapture(CvCapture*);
+		void setCapture(CvCapture*);	
 		void next();
 
 	private:
