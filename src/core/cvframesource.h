@@ -12,14 +12,17 @@ class CvFrameSource : public IFrameSource
 	    CvFrameSource(CvCapture*);
 		void setCapture(CvCapture*);	
 		void next();
+		void reset();
+		bool isValid() const;
+		int getFrameCount() const;
 
 	private:
 		void cvtIplImage2QPixmap(IplImage*);
 
 		CvCapture* sourceCapture;
-		IplImage* nextFrame;
-		QImage nextQImage;
-		QImage nextQPixmap;
+		IplImage* RGBImage;
+		QImage* nextQImage;
+	
 };
 
 

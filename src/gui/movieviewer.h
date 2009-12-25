@@ -47,7 +47,8 @@ class MovieViewer : public QWidget
 		void showFrame(const QPixmap&);
 		void updateViewer(bool updating);
 		void start();
-		void setPaused(bool);
+		void pause();
+		void stop();
 		void queryNextFrame();
 
 	signals:
@@ -63,6 +64,7 @@ class MovieViewer : public QWidget
 		
 		
         void createControls();
+		void updateControls();
 
 		IFrameSource* viewerSource;
 

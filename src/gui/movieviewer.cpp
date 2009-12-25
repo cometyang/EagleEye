@@ -4,6 +4,8 @@
 MovieViewer::MovieViewer(QWidget* parent)
     : QWidget(parent)
 {
+	viewerSource=NULL;
+
 	movieLabel = new QLabel(tr("No movie loaded"));
     movieLabel->setAlignment(Qt::AlignCenter);
     movieLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -14,7 +16,7 @@ MovieViewer::MovieViewer(QWidget* parent)
 	
 	viewerTimer = new QTimer(this);
     viewerTimer->setSingleShot(true);
-	
+	connect(viewerTimer, SIGNAL(timeout()), this, SLOT(queryNextFrame()));
 
 	createControls();
     
@@ -23,6 +25,7 @@ MovieViewer::MovieViewer(QWidget* parent)
 	mainLayout->addLayout(controlsLayout);
 	setLayout(mainLayout);
 	
+	updateControls();
 }
  
 void
@@ -36,6 +39,8 @@ MovieViewer::setSource(IFrameSource* source)
 {
 	viewerSource=source;
 	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
+
+	updateControls();
 }
 void
 MovieViewer::setSource(const QString& filename)
@@ -44,6 +49,8 @@ MovieViewer::setSource(const QString& filename)
     assert(camera);
     viewerSource =new CvFrameSource(camera);
 	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
+
+	updateControls();
 }
 
 void 
@@ -54,38 +61,44 @@ MovieViewer::setState(ViewerState newState)
 		currentState = newState;
 		emit stateChanged(newState);
 	}
+	updateControls();
 } 
 
 void 
-MovieViewer::setPaused(bool paused)
+MovieViewer::pause()
 {  
-     if (paused) 
-	 {
-		 if (currentState == MovieViewer::NotRunning)
-            return;
-        setState(Paused);
-        viewerTimer->stop();
-	 } else 
-	 {
-        if (currentState == MovieViewer::Running)
-            return;
-        setState(MovieViewer::Running);
-        viewerTimer->start(10);
-     }
+    if (currentState == Running) 
+	{
+		setState(Paused);
+		viewerTimer->stop();
+    }
+	else
+	{
+		setState(Running);
+		viewerTimer->start(10);
+	}
 }  
 
 void 
 MovieViewer::start()
 { 
-  	connect(viewerTimer, SIGNAL(timeout()), this, SLOT(queryNextFrame()));
-	if (currentState == MovieViewer::NotRunning) 
+  	
+	if (currentState == NotRunning) 
 	{
+		setState(Running);
 		viewerTimer->start(10);
+    } 
+} 
 
-    } else if (currentState == MovieViewer::Paused) 
-	{
-        setPaused(false);
-    }
+void 
+MovieViewer::stop()
+{   
+    if (currentState != NotRunning)
+      {
+	      setState(NotRunning);
+          viewerTimer->stop(); 
+          viewerSource->reset();
+       }    
 } 
 
 void
@@ -155,13 +168,13 @@ MovieViewer::createControls()
     pauseButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
     pauseButton->setIconSize(iconSize);
     pauseButton->setToolTip(tr("Pause"));
-  //  connect(pauseButton, SIGNAL(clicked(bool)), movie, SLOT(setPaused(bool)));
+    connect(pauseButton, SIGNAL(clicked()), this, SLOT(pause()));
 
     stopButton = new QToolButton;
     stopButton->setIcon(style()->standardIcon(QStyle::SP_MediaStop));
     stopButton->setIconSize(iconSize);
     stopButton->setToolTip(tr("Stop"));
-   // connect(stopButton, SIGNAL(clicked()), movie, SLOT(stop()));
+    connect(stopButton, SIGNAL(clicked()), this, SLOT(stop()));
 
     quitButton = new QToolButton;
     quitButton->setIcon(style()->standardIcon(QStyle::SP_DialogCloseButton));
@@ -182,3 +195,11 @@ MovieViewer::createControls()
 	controlsLayout->addLayout(frameSliderLayout);
 	controlsLayout->addLayout(buttonsLayout);
 }
+
+void MovieViewer::updateControls()
+{ 
+    playButton->setEnabled(viewerSource && viewerSource->isValid() && viewerSource->getFrameCount() != 1 && currentState == NotRunning);
+    pauseButton->setEnabled(currentState != NotRunning);
+    pauseButton->setChecked(currentState == Paused);
+    stopButton->setEnabled(currentState != NotRunning);
+} 
