@@ -36,6 +36,7 @@ private:
     void createMenus();
     void createToolBars();
     void createStatusBar();
+	void createDockWindows();
   
     void loadFile(const QString &fileName);
 
@@ -44,11 +45,18 @@ private:
     QString strippedName(const QString &fullFileName);
 
     MovieViewer *player;
+	MovieViewer *detector;
+	MovieViewer *tracker;
+
+	IFrameSource* mainSource;
+
     QString curFile;
 
     QMenu *fileMenu;
     QMenu *algorithmMenu;
+	QMenu *viewMenu;
     QMenu *helpMenu;
+
     QToolBar *fileToolBar;
     
    

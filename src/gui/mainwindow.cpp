@@ -6,11 +6,10 @@
 
 MainWindow::MainWindow()
  {
-    player = new MovieViewer(this);
-    setCentralWidget(player);
     createActions();
     createMenus();
     createToolBars();
+	createDockWindows();
     createStatusBar();
     setWindowTitle(tr("Movie Player"));
     resize(200, 300);
@@ -88,6 +87,9 @@ void MainWindow::createMenus()
     algorithmMenu->addAction(edgeAct);
     algorithmMenu->addAction(gmmbsAct);
 
+	menuBar()->addSeparator();
+    viewMenu = menuBar()->addMenu(tr("&View")); 
+
     menuBar()->addSeparator();
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
@@ -102,6 +104,27 @@ void MainWindow::createToolBars()
     fileToolBar->addAction(openAct);
 } 
 
+void MainWindow::createDockWindows()
+{ 
+    QDockWidget *dock = new QDockWidget(tr("Player"), this);
+    player = new MovieViewer(dock);
+    dock->setWidget(player);
+    addDockWidget(Qt::LeftDockWidgetArea, dock);
+    viewMenu->addAction(dock->toggleViewAction());
+
+    dock = new QDockWidget(tr("Detector"), this);
+    detector = new MovieViewer(dock);
+    dock->setWidget(detector);
+    addDockWidget(Qt::RightDockWidgetArea, dock);
+    viewMenu->addAction(dock->toggleViewAction());
+
+    dock = new QDockWidget(tr("Tracker"), this);
+    tracker = new MovieViewer(dock);
+    dock->setWidget(tracker);
+    addDockWidget(Qt::RightDockWidgetArea, dock);
+    viewMenu->addAction(dock->toggleViewAction());
+} 
+
 void MainWindow::createStatusBar()
 { 
     statusBar()->showMessage(tr("Ready"));
@@ -109,7 +132,12 @@ void MainWindow::createStatusBar()
 
 void MainWindow::loadFile(const QString &filename)
  { 
-    player->setSource(filename);
+    CvCapture * camera = cvCaptureFromAVI(filename.toUtf8());
+    assert(camera);
+    mainSource =new CvFrameSource(camera);
+	player->setSource(mainSource);
+	detector->setSource(mainSource);
+	tracker->setSource(mainSource);
     statusBar()->showMessage(tr("file loaded"), 2000);
 } 
 
