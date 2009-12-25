@@ -11,10 +11,11 @@ class IFrameSource : public QObject
 {
  Q_OBJECT
  public:
-	 virtual void next() = 0; //Obtain next IplImage*
+	 virtual bool next() = 0; //Obtain next IplImage*
 	 virtual void reset() = 0; //Return to initial condition
 	 virtual bool isValid() const=0; //Check if source is valid
 	 virtual int getFrameCount() const =0; //return frame count in source
+	 virtual int getCurrentFramePosition() const=0; //return frame position
  signals:
 	 void updated(const QPixmap&);
 

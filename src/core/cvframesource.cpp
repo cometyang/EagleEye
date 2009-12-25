@@ -15,14 +15,21 @@ CvFrameSource::setCapture(CvCapture* capture)
 	  sourceCapture=capture;
 }
 
-void
+bool
 CvFrameSource::next()
 {
-   
+    if (getCurrentFramePosition()<(getFrameCount()-1))
+	{
 	cvtIplImage2QPixmap(cvQueryFrame(sourceCapture));
 	emit
 		updated(QPixmap::fromImage(*nextQImage));
 	if (RGBImage) cvReleaseImage(&RGBImage);
+	return true;
+	}
+	else
+	{
+	return false;
+	}
 }
 
 void
@@ -43,7 +50,13 @@ CvFrameSource::isValid() const
 int
 CvFrameSource::getFrameCount() const
 {
- return cvGetCaptureProperty(sourceCapture, CV_CAP_PROP_FRAME_COUNT);
+  return cvGetCaptureProperty(sourceCapture, CV_CAP_PROP_FRAME_COUNT);
+}
+
+int
+CvFrameSource::getCurrentFramePosition() const
+ { 
+   return cvGetCaptureProperty(sourceCapture, CV_CAP_PROP_POS_FRAMES);  
 }
 
 void

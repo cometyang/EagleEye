@@ -104,8 +104,14 @@ MovieViewer::stop()
 void
 MovieViewer::queryNextFrame()
 {
-	viewerSource->next();
+	if (viewerSource->next())
+	{
     viewerTimer->start(10);
+	}
+	else
+	{
+    stop();
+	}
 }
 void 
 MovieViewer::updateViewer(bool updating)
