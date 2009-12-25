@@ -11,21 +11,21 @@ MovieViewer::MovieViewer(QWidget* parent)
     movieLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     movieLabel->setBackgroundRole(QPalette::Dark);
     movieLabel->setAutoFillBackground(true);
-   
-	currentState=MovieViewer::NotRunning;
-	
+  
 	viewerTimer = new QTimer(this);
     viewerTimer->setSingleShot(true);
 	connect(viewerTimer, SIGNAL(timeout()), this, SLOT(queryNextFrame()));
 
 	createControls();
-    
+    connect(this, SIGNAL(stateChanged()), this, SLOT(updateControls()));
+	connect(frameSlider, SIGNAL(valueChanged(int)), this, SLOT(goToFrame(int)));
+	
+
 	mainLayout = new QVBoxLayout;
     mainLayout->addWidget(movieLabel);
 	mainLayout->addLayout(controlsLayout);
 	setLayout(mainLayout);
-	
-	updateControls();
+    setState(NotRunning);
 }
  
 void
@@ -39,30 +39,41 @@ MovieViewer::setSource(IFrameSource* source)
 {
 	viewerSource=source;
 	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
-
-	updateControls();
+	connect(viewerSource, SIGNAL(frameChanged(int)), frameSlider, SLOT(setValue(int)));
+    setState(NotRunning);
 }
+
 void
 MovieViewer::setSource(const QString& filename)
 {
 	CvCapture * camera = cvCaptureFromAVI(filename.toUtf8());
     assert(camera);
-    viewerSource =new CvFrameSource(camera);
-	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
-
-	updateControls();
+	setSource(new CvFrameSource(camera));
 }
 
 void 
 MovieViewer::setState(ViewerState newState) 
 {
-	if (newState != currentState) 
+	if (currentState)
+	{
+		if(newState != currentState) 
+		{
+		currentState = newState;
+		emit stateChanged();
+		}
+	}
+	else
 	{
 		currentState = newState;
-		emit stateChanged(newState);
+		emit stateChanged();
 	}
-	updateControls();
 } 
+
+void
+MovieViewer::goToFrame(int pos)
+{
+	viewerSource->setFramePosition(pos);
+}
 
 void 
 MovieViewer::pause()
@@ -112,38 +123,8 @@ MovieViewer::queryNextFrame()
 	{
     stop();
 	}
+	frameSlider->setValue(viewerSource->getFramePosition());
 }
-void 
-MovieViewer::updateViewer(bool updating)
-{ 
-	//if (next()) {
-	//	if (updating && viewerState == MovieViewer::NotRunning) {
-      //      enterState(CvMovie::Running);
-            // emit started();
-        // }
-
-       // /* if (frameRect.size() != currentPixmap.rect().size()) {
-            // frameRect = currentPixmap.rect();
-            // emit resized(frameRect.size());
-        // }
-            // */
-        // emit updated(currentPixmap);
-     //   emit updated(frameRect);
-	// emit frameChanged(getCurrentFrameNumber());
-
-        // if (movieState == CvMovie::Running)
-            // nextImageTimer->start(10);
-    // } else {
-       
-       // Graceful finish
-        // if (movieState != CvMovie::Paused) {
-            // enterState(CvMovie::NotRunning);
-            // cvSetCaptureProperty(capture, CV_CAP_PROP_POS_FRAMES, 0);
-	    // emit finished();
-        // }
-    // }
-} 
-
 
 void 
 MovieViewer::createControls()
@@ -208,4 +189,18 @@ void MovieViewer::updateControls()
     pauseButton->setEnabled(currentState != NotRunning);
     pauseButton->setChecked(currentState == Paused);
     stopButton->setEnabled(currentState != NotRunning);
+    
+	if (viewerSource)
+	{
+		if (currentState == NotRunning)
+		{
+		frameSlider->setMaximum(viewerSource->getFrameCount() - 1);
+		frameSlider->setValue(0);
+		}
+    } 
+	else 
+	{
+        frameSlider->setMaximum(0);
+    }
+    frameSlider->setEnabled(viewerSource);
 } 

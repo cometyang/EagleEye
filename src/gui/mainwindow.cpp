@@ -11,8 +11,13 @@ MainWindow::MainWindow()
     createToolBars();
 	createDockWindows();
     createStatusBar();
+
     setWindowTitle(tr("Movie Player"));
-    resize(200, 300);
+	setUnifiedTitleAndToolBarOnMac(true);
+    setAnimated(true);
+    setDockNestingEnabled (true);
+    
+	resize(300, 400);
    
 }
 void MainWindow::closeEvent(QCloseEvent *event)

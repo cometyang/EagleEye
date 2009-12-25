@@ -45,26 +45,29 @@ class MovieViewer : public QWidget
 
 	public slots:
 		void showFrame(const QPixmap&);
-		void updateViewer(bool updating);
+		
 		void start();
 		void pause();
 		void stop();
 		void queryNextFrame();
-
+		void goToFrame(int);
+        
+		void updateControls();
+        
 	signals:
 		void started();
 		void updatedPlayer(const QPixmap&);
 		void updatedDetector(const QPixmap&);
-		void stateChanged(ViewerState);
+		void stateChanged();
 		void finished();
-		void frameChanged(int);
+		
 		void threshholdChanged(int);
 	
 	private:
 		
 		
         void createControls();
-		void updateControls();
+		
 
 		IFrameSource* viewerSource;
 

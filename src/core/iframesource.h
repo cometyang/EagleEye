@@ -15,9 +15,12 @@ class IFrameSource : public QObject
 	 virtual void reset() = 0; //Return to initial condition
 	 virtual bool isValid() const=0; //Check if source is valid
 	 virtual int getFrameCount() const =0; //return frame count in source
-	 virtual int getCurrentFramePosition() const=0; //return frame position
+	 virtual int getFramePosition() const=0; //return frame position
+	 virtual void setFramePosition(int)=0; //set frame position
+	 
  signals:
 	 void updated(const QPixmap&);
+	 void frameChanged(int);
 
 };
 #endif

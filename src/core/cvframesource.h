@@ -15,7 +15,9 @@ class CvFrameSource : public IFrameSource
 		void reset();
 		bool isValid() const;
 		int getFrameCount() const;
-		int getCurrentFramePosition() const;
+		int getFramePosition() const;
+		void setFramePosition(int);
+	
 
 	private:
 		void cvtIplImage2QPixmap(IplImage*);
