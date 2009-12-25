@@ -23,9 +23,9 @@ MovieViewer::MovieViewer(QWidget* parent)
 }
  
 void
-MovieViewer::showFrame(IFrameSource* source)
+MovieViewer::showFrame(const QPixmap& showQPixmap)
 {
-	movieLabel->setPixmap(*(source->next()));
+	movieLabel->setPixmap(showQPixmap);
 }
  
 void 

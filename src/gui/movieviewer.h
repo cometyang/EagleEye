@@ -42,7 +42,7 @@ class MovieViewer : public QWidget
 		void setState(ViewerState newState);
 
 	public slots:
-		void showFrame(IFrameSource*);
+		void showFrame(const QPixmap&);
 		void updateViewer(bool updating);
 
 	signals:

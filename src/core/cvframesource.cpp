@@ -13,19 +13,21 @@ CvFrameSource::setCapture(CvCapture* capture)
 	  sourceCapture=capture;
 }
 
-QPixmap*
+void
 CvFrameSource::next()
 {
     nextFrame=cvQueryFrame(sourceCapture);
-	return cvtIplImage2QPixmap(nextFrame);
+	cvtIplImage2QPixmap(nextFrame);
+	emit
+		updated(QPixmap::fromImage(nextQImage));
 }
 
-QPixmap*
+void
 CvFrameSource::cvtIplImage2QPixmap(IplImage *BGRImage)
 {
 	IplImage* RGBImage=cvCreateImage(cvGetSize(BGRImage), BGRImage->depth, BGRImage->nChannels);
     cvCvtColor(BGRImage, RGBImage, CV_BGR2RGB);
-    QImage qimage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_RGB888);
-    return &(QPixmap::fromImage(qimage));
+    nextQImage = QImage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_RGB888);
+	// return &(QPixmap::fromImage(*qimage));
    // cvReleaseImage(&RGBImage);
 }

@@ -11,12 +11,15 @@ class CvFrameSource : public IFrameSource
     public:
 	    CvFrameSource(CvCapture*);
 		void setCapture(CvCapture*);
-		QPixmap* next();
-		
+		void next();
+
 	private:
+		void cvtIplImage2QPixmap(IplImage*);
+
 		CvCapture* sourceCapture;
 		IplImage* nextFrame;
-		QPixmap* cvtIplImage2QPixmap(IplImage*);
+		QImage nextQImage;
+		QImage nextQPixmap;
 };
 
 

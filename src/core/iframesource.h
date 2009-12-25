@@ -1,14 +1,19 @@
 #ifndef IFRAMESOURCE_H
 #define	IFRAMESOURCE_H
 
+#include <QObject>
+
 QT_BEGIN_NAMESPACE
 class QPixmap;
 QT_END_NAMESPACE
 
-class IFrameSource
+class IFrameSource : public QObject
 {
+ Q_OBJECT
  public:
-	 virtual QPixmap* next() = 0; //Obtain next IplImage*
+	 virtual void next() = 0; //Obtain next IplImage*
+ signals:
+	 void updated(const QPixmap&);
 
 };
 #endif
