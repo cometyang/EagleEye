@@ -39,13 +39,13 @@ class MovieViewer : public QWidget
 			Running
 		}; 
         
-		void setState(ViewerState newState);
+		
 		void setSource(const QString &fileName);
 		void setSource(IFrameSource*);
 
 	public slots:
 		void showFrame(const QPixmap&);
-		
+		void setState(ViewerState newState);
 		void start();
 		void pause();
 		void stop();
@@ -58,7 +58,7 @@ class MovieViewer : public QWidget
 		void started();
 		void updatedPlayer(const QPixmap&);
 		void updatedDetector(const QPixmap&);
-		void stateChanged();
+		void stateChanged(ViewerState);
 		void finished();
 		
 		void threshholdChanged(int);

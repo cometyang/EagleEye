@@ -66,11 +66,18 @@ CvFrameSource::getFramePosition() const
 
 void
 CvFrameSource::setFramePosition(int pos)
- { 
+{ 
+   if (getFramePosition() != pos && pos<(getFrameCount()-1))
+   {
    cvSetCaptureProperty(sourceCapture, CV_CAP_PROP_POS_FRAMES, pos);
    cvtIplImage2QPixmap(cvQueryFrame(sourceCapture));
-   emit updated(QPixmap::fromImage(*nextQImage));
+   emit
+	{
+		updated(QPixmap::fromImage(*nextQImage));
+	  //  frameChanged(pos);
+	}
    if (RGBImage) cvReleaseImage(&RGBImage);
+   }
 }
 
 void

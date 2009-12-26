@@ -128,6 +128,10 @@ void MainWindow::createDockWindows()
     dock->setWidget(tracker);
     addDockWidget(Qt::RightDockWidgetArea, dock);
     viewMenu->addAction(dock->toggleViewAction());
+
+	connect(player, SIGNAL(stateChanged(ViewerState)), detector, SLOT(setState(ViewerState)));
+	connect(detector, SIGNAL(stateChanged(ViewerState)), tracker, SLOT(setState(ViewerState)));
+	//connect(tracker, SIGNAL(stateChanged(ViewerState)), player, SLOT(setState(ViewerState)));
 } 
 
 void MainWindow::createStatusBar()

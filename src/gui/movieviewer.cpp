@@ -17,7 +17,7 @@ MovieViewer::MovieViewer(QWidget* parent)
 	connect(viewerTimer, SIGNAL(timeout()), this, SLOT(queryNextFrame()));
 
 	createControls();
-    connect(this, SIGNAL(stateChanged()), this, SLOT(updateControls()));
+    connect(this, SIGNAL(stateChanged(ViewerState)), this, SLOT(updateControls()));
 	connect(frameSlider, SIGNAL(valueChanged(int)), this, SLOT(goToFrame(int)));
 	
 
@@ -59,13 +59,13 @@ MovieViewer::setState(ViewerState newState)
 		if(newState != currentState) 
 		{
 		currentState = newState;
-		emit stateChanged();
+		emit stateChanged(newState);
 		}
 	}
 	else
 	{
 		currentState = newState;
-		emit stateChanged();
+		emit stateChanged(newState);
 	}
 } 
 
@@ -123,7 +123,6 @@ MovieViewer::queryNextFrame()
 	{
     stop();
 	}
-	frameSlider->setValue(viewerSource->getFramePosition());
 }
 
 void 
@@ -190,7 +189,7 @@ void MovieViewer::updateControls()
     pauseButton->setChecked(currentState == Paused);
     stopButton->setEnabled(currentState != NotRunning);
     
-	if (viewerSource)
+	if (viewerSource && viewerSource->isValid())
 	{
 		if (currentState == NotRunning)
 		{
