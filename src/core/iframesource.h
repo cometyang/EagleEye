@@ -2,6 +2,7 @@
 #define	IFRAMESOURCE_H
 
 #include <QObject>
+#include <cv.h>
 
 QT_BEGIN_NAMESPACE
 class QPixmap;
@@ -19,7 +20,7 @@ class IFrameSource : public QObject
 	 virtual void setFramePosition(int)=0; //set frame position
 	 
  signals:
-	 void updated(const QPixmap&);
+	 void updated(IplImage*);
 	 void frameChanged(int);
 
 };

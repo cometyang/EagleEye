@@ -2,6 +2,7 @@
 #define	CVFRAMESOURCE_H
 
 #include <QWidget>
+#include <deque>
 #include <cv.h>
 #include <highgui.h>
 #include "iframesource.h"
@@ -17,15 +18,12 @@ class CvFrameSource : public IFrameSource
 		int getFrameCount() const;
 		int getFramePosition() const;
 		void setFramePosition(int);
+
 	
 
 	private:
-		void cvtIplImage2QPixmap(IplImage*);
-
 		CvCapture* sourceCapture;
-		IplImage* RGBImage;
-		QImage* nextQImage;
-	
+
 };
 
 

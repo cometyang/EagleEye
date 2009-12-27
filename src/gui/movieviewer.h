@@ -44,24 +44,20 @@ class MovieViewer : public QWidget
 		void setSource(IFrameSource*);
 
 	public slots:
-		void showFrame(const QPixmap&);
+		
 		void setState(ViewerState newState);
 		void start();
 		void pause();
 		void stop();
 		void queryNextFrame();
 		void goToFrame(int);
-        
 		void updateControls();
+		void setIplImage(IplImage*);
         
 	signals:
 		void started();
-		void updatedPlayer(const QPixmap&);
-		void updatedDetector(const QPixmap&);
 		void stateChanged(ViewerState);
-		void finished();
-		
-		void threshholdChanged(int);
+	
 	
 	private:
 		
@@ -76,7 +72,10 @@ class MovieViewer : public QWidget
 
 		ViewerState currentState;
 		QTimer* viewerTimer;
-         
+        
+		QImage* frameQImage;
+
+
 		QToolButton *openButton;
         QToolButton *playButton;
         QToolButton *pauseButton;

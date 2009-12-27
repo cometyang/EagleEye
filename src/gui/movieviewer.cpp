@@ -29,16 +29,10 @@ MovieViewer::MovieViewer(QWidget* parent)
 }
  
 void
-MovieViewer::showFrame(const QPixmap& showQPixmap)
-{
-	movieLabel->setPixmap(showQPixmap);
-}
-
-void
 MovieViewer::setSource(IFrameSource* source)
 {
 	viewerSource=source;
-	connect(viewerSource, SIGNAL(updated(const QPixmap&)), this, SLOT(showFrame(const QPixmap&)));
+	connect(viewerSource, SIGNAL(updated(IplImage*)), this, SLOT(setIplImage(IplImage*)));
 	connect(viewerSource, SIGNAL(frameChanged(int)), frameSlider, SLOT(setValue(int)));
     setState(NotRunning);
 }
@@ -125,6 +119,16 @@ MovieViewer::queryNextFrame()
 	}
 }
 
+void
+MovieViewer::setIplImage(IplImage *BGRImage)
+{
+	IplImage* RGBImage=cvCloneImage(BGRImage);
+    cvCvtColor(BGRImage, RGBImage, CV_BGR2RGB);
+    frameQImage=new QImage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_RGB888);
+	movieLabel->setPixmap(QPixmap::fromImage(*frameQImage));
+	cvReleaseImage(&RGBImage);
+}
+
 void 
 MovieViewer::createControls()
 {
@@ -203,3 +207,4 @@ void MovieViewer::updateControls()
     }
     frameSlider->setEnabled(viewerSource);
 } 
+
