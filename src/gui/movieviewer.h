@@ -57,7 +57,7 @@ class MovieViewer : public QWidget
 	signals:
 		void started();
 		void stateChanged(ViewerState);
-	
+		
 	
 	private:
 		

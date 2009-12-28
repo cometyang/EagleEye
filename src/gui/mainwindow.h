@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include "movieviewer.h"
+#include "../algorithms/codebook.h"
+
 using namespace std;
 
 QT_BEGIN_NAMESPACE
@@ -19,6 +21,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow();
+
 
 protected:
     void closeEvent(QCloseEvent *event);
@@ -47,10 +50,13 @@ private:
     MovieViewer *player;
 	MovieViewer *detector;
 	MovieViewer *tracker;
+	
 
 	IFrameSource* mainSource;
-
-    QString curFile;
+	IAlgorithmModel* algmodel;
+	
+    
+	QString curFile;
 
     QMenu *fileMenu;
     QMenu *algorithmMenu;

@@ -27,9 +27,12 @@ set(EagleEye_SRCS
 	
 	#core/cvmovie.cpp
 	
+	# algorithm source
+	algorithms/codebook.cpp
+	
 	# test source 
 	# test/sample1_unittest.cc
-	
+		
 	)
 
 set(EagleEye_MOCS
@@ -43,6 +46,9 @@ set(EagleEye_MOCS
 	gui/mainwindow.h
 	gui/movieviewer.h
 	
+	# algorithm header
+	algorithms/ialgorithmmodel.h
+	algorithms/codebook.h
 	)
 
 set(EagleEye_RCCS

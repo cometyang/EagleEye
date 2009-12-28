@@ -17,24 +17,29 @@ CvFrameSource::setCapture(CvCapture* capture)
 }
 
 bool
-CvFrameSource::next()
+CvFrameSource::hasNext()
 {
     if (getFramePosition()<(getFrameCount()-1))
-	{
-	emit
-	{
-		updated(cvQueryFrame(sourceCapture));
-	    frameChanged(getFramePosition());
-	}
-	return true;
-	}
+		return true;
 	else
-	{
-	return false;
-	}
+		return false;	
 }
 
-
+IplImage*
+CvFrameSource::nextFrame()
+{
+	if (hasNext())
+	{
+		nextIplImage=cvQueryFrame(sourceCapture);
+	emit
+	    {
+		updated(nextIplImage);
+	    frameChanged(getFramePosition());
+	    }
+		
+	}
+	return nextIplImage;
+}
 
 void
 CvFrameSource::reset()
@@ -63,18 +68,20 @@ CvFrameSource::getFramePosition() const
    return cvGetCaptureProperty(sourceCapture, CV_CAP_PROP_POS_FRAMES);  
 }
 
-void
+IplImage*
 CvFrameSource::setFramePosition(int pos)
 { 
    if (getFramePosition() != pos && pos<(getFrameCount()-1))
    {
-   cvSetCaptureProperty(sourceCapture, CV_CAP_PROP_POS_FRAMES, pos);
+   cvSetCaptureProperty(sourceCapture, CV_CAP_PROP_POS_FRAMES, pos-1);
+   nextIplImage=cvQueryFrame(sourceCapture);
    emit
-	{
-		updated(cvQueryFrame(sourceCapture));
-	  //  frameChanged(pos);
-	}
+	    {
+		updated(nextIplImage);
+	    frameChanged(getFramePosition());
+	    }
    }
+   return nextIplImage;
 }
 
 

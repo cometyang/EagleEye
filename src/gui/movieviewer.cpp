@@ -109,22 +109,33 @@ MovieViewer::stop()
 void
 MovieViewer::queryNextFrame()
 {
-	if (viewerSource->next())
+	if (viewerSource->hasNext())
 	{
-    viewerTimer->start(10);
+		viewerSource->nextFrame();
+//		this->setIplImage(((this->parent)->codebookModel)->ImaskCodeBook);
+		viewerTimer->start(10);
 	}
 	else
 	{
-    stop();
+		stop();
 	}
 }
 
 void
 MovieViewer::setIplImage(IplImage *BGRImage)
 {
+	
 	IplImage* RGBImage=cvCloneImage(BGRImage);
-    cvCvtColor(BGRImage, RGBImage, CV_BGR2RGB);
+	if (RGBImage->nChannels ==3)
+	{
+	cvCvtColor(BGRImage, RGBImage, CV_BGR2RGB);
+	//cvConvertImage(BGRImage, RGBImage, CV_CVTIMG_SWAP_RB);
     frameQImage=new QImage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_RGB888);
+	}
+	else if (RGBImage->nChannels ==1)
+	{
+		frameQImage=new QImage((uchar *)RGBImage->imageData, RGBImage->width, RGBImage->height, RGBImage->widthStep, QImage::Format_Indexed8);
+	}
 	movieLabel->setPixmap(QPixmap::fromImage(*frameQImage));
 	cvReleaseImage(&RGBImage);
 }

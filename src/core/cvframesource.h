@@ -12,17 +12,21 @@ class CvFrameSource : public IFrameSource
     public:
 	    CvFrameSource(CvCapture*);
 		void setCapture(CvCapture*);	
-		bool next();
+		bool hasNext();
+		IplImage* nextFrame();
+
 		void reset();
 		bool isValid() const;
 		int getFrameCount() const;
 		int getFramePosition() const;
-		void setFramePosition(int);
+		IplImage* setFramePosition(int);
+		
 
 	
 
 	private:
 		CvCapture* sourceCapture;
+		IplImage* nextIplImage;
 
 };
 

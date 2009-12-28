@@ -144,9 +144,15 @@ void MainWindow::loadFile(const QString &filename)
     CvCapture * camera = cvCaptureFromAVI(filename.toUtf8());
     assert(camera);
     mainSource =new CvFrameSource(camera);
+    algmodel= new CodeBook(mainSource->nextFrame());
+
+	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+
 	player->setSource(mainSource);
-	detector->setSource(mainSource);
+	
 	tracker->setSource(mainSource);
+	
     statusBar()->showMessage(tr("file loaded"), 2000);
 } 
 
