@@ -26,6 +26,7 @@ class CodeBook  : public IAlgorithmModel
 
 	IplImage* yuvFrame;
 	IplImage* mask;
+	IplImage* dstFrame;
 	
 	CvBGCodeBookModel* model;
 };

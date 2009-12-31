@@ -38,7 +38,7 @@ set(EagleEye_SRCS
 set(EagleEye_MOCS
     # core header
 	core/iframesource.h
-	core/cvframesource.cpp
+	core/cvframesource.h
 	#gui/movieplayer.h
 	#core/cvmovie.h
     #gui/cvmovielabel.h
