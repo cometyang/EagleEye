@@ -86,12 +86,43 @@ void computeDerivatives2(const CvMat* src1, const CvMat* src2, CvMat* fx, CvMat*
 
 }
 
+void estimateModel(const CvMat* fx, const CvMat* fy, CvMat* ft, CvMat* M, int rows, int cols)
+{
+        
+	    CvMat* A=cvCreateMat(cols*rows, 8 , CV_32FC1);
+		CvMat* b=cvCreateMat(cols*rows, 1 , CV_32FC1);
+		
+		for(int k=0;k<cols;k++)
+			for(int l=0;l<rows;l++)
+			{
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,0))=(k+1)*CV_MAT_ELEM(*fx, float, l, k);
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,1))=(l+1)*CV_MAT_ELEM(*fx, float, l, k);
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,2))=CV_MAT_ELEM(*fx, float, l, k);
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,3))=(k+1)*CV_MAT_ELEM(*fy, float, l, k);
+                *((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,4))=(l+1)*CV_MAT_ELEM(*fy, float, l, k);
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,5))=CV_MAT_ELEM(*fy, float, l, k);
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,6))=-(k+1)*(k+1)*CV_MAT_ELEM(*fx, float, l, k)-(l+1)*(k+1)*CV_MAT_ELEM(*fy, float, l, k);//+(k+1)*CV_MAT_ELEM(*ft, float, l, k);
+				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,7))=-(l+1)*(k+1)*CV_MAT_ELEM(*fx, float, l, k)-(l+1)*(l+1)*CV_MAT_ELEM(*fy, float, l, k);//+(l+1)*CV_MAT_ELEM(*ft, float, l, k);
+			    *((float*)CV_MAT_ELEM_PTR(*b,k*rows+l,0))=(k+1)*CV_MAT_ELEM(*fx, float, l, k)+(l+1)*CV_MAT_ELEM(*fy, float, l, k)-CV_MAT_ELEM(*ft, float, l, k);
+			}
+       
+	  
+
+        CvMat* p=cvCreateMat(8,1, CV_32FC1);
+        if (cvSolve(A, b, p))
+			printf("solved");
+		else
+			printf("singular");
+
+		
+		cvSetData(M, CV_MAT_ELEM_PTR(*p,0,0), M->step);
+		//*((float*)CV_MAT_ELEM_PTR(*M,2,0))=0.0;
+		//*((float*)CV_MAT_ELEM_PTR(*M,2,1))=0.0;
+		*((float*)CV_MAT_ELEM_PTR(*M,2,2))=1.0;
+}
+
 int main( int argc, char** argv )
 {
-   
-	
-	
-	
 	IplImage* src1;
 	IplImage* src2;
     // the first command line parameter must be file name of binary
@@ -111,7 +142,7 @@ int main( int argc, char** argv )
 		CvMat*  fy = cvCreateMat(rows,cols, CV_32FC1 );
 		CvMat*  ft = cvCreateMat(rows,cols, CV_32FC1 );
 		computeDerivatives2(src1Mat, src2Mat, fx, fy, ft, rows, cols);
-	    /*for test
+	    /*
 		float d1[]={1,1,1,1,1,1,1,1,1,1,1,1};
 		float d2[]={2,2,2,2,2,2,2,2,2,2,2,2};
 		float d3[]={3,3,3,3,3,3,3,3,3,3,3,3};
@@ -123,31 +154,39 @@ int main( int argc, char** argv )
 		CvMat* fx=&fx1;
 		CvMat* fy=&fy1;
 		CvMat* ft=&ft1;
+		
 		*/
-		cvNamedWindow( "Components", 1 );
-        cvShowImage( "Components", ft );
-		CvMat* A=cvCreateMat(cols*rows, 8 , CV_32FC1);
-		CvMat* b=cvCreateMat(cols*rows, 1 , CV_32FC1);
-		printf("%f\n",CV_MAT_ELEM(*fx, float, 0, 0));
-		for(int k=0;k<cols;k++)
-			for(int l=0;l<rows;l++)
-			{
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,0))=(k+1)*CV_MAT_ELEM(*fx, float, l, k);
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,1))=(l+1)*CV_MAT_ELEM(*fx, float, l, k);
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,2))=CV_MAT_ELEM(*fx, float, l, k);
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,3))=(k+1)*CV_MAT_ELEM(*fy, float, l, k);
-                *((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,4))=(l+1)*CV_MAT_ELEM(*fy, float, l, k);
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,5))=CV_MAT_ELEM(*fy, float, l, k);
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,6))=(k+1)*CV_MAT_ELEM(*ft, float, l, k)-(k+1)*(k+1)*CV_MAT_ELEM(*fx, float, l, k)-(l+1)*(k+1)*CV_MAT_ELEM(*fy, float, l, k);
-				*((float*)CV_MAT_ELEM_PTR(*A,k*rows+l,7))=(l+1)*CV_MAT_ELEM(*ft, float, l, k)-(l+1)*(k+1)*CV_MAT_ELEM(*fx, float, l, k)-(l+1)*(l+1)*CV_MAT_ELEM(*fy, float, l, k);
-			    *((float*)CV_MAT_ELEM_PTR(*b,k*rows+l,0))=(k+1)*CV_MAT_ELEM(*fx, float, l, k)+(l+1)*CV_MAT_ELEM(*fy, float, l, k)-CV_MAT_ELEM(*ft, float, l, k);
-			}
+		CvMat* M=cvCreateMat(3,3, CV_32FC1);
+		CvMat* deltaM=cvCreateMat(3,3, CV_32FC1);
+		estimateModel(fx, fy, ft, M, rows, cols);
+		
+		PrintMat(M); 
+        CvMat*  dst2Mat= cvCreateMat(rows,cols, CV_32FC1);
+        
+		CvMat* P=cvCreateMat(2,3,CV_32FC1);
+        for (int i=0;i<3;i++)
+		{
+       // cvGetSubRect(M, P, cvRect( 0, 0, 3, 2));
+		//PrintMat(P);
+		cvWarpPerspective(src2Mat, dst2Mat, M, CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS);
+		computeDerivatives2(src1Mat, dst2Mat, fx, fy, ft, rows, cols);
+        estimateModel(fx, fy, ft, deltaM, rows, cols);
+		PrintMat(deltaM);
+		cvMatMul(deltaM, M, M);
+		PrintMat(M);
+        cvConvertScale(M, M, 1.0/CV_MAT_ELEM(*M, float, 2, 2));
+		PrintMat(M);
+		}
+	    
+		
+        cvAbsDiff(src1Mat, src2Mat, src2Mat);
+        cvNamedWindow( "s2", 1 );
+        cvShowImage( "s2", src2Mat);
+
+        cvAbsDiff(src1Mat, dst2Mat, dst2Mat);
+        cvNamedWindow( "d2", 1 );
+        cvShowImage( "d2", dst2Mat);
        
-	
-      
-        CvMat* p=cvCreateMat(8,1, CV_32FC1);
-        cvSolve(A, b, p); 
-		PrintMat(p); 
-        cvWaitKey(0);
+		cvWaitKey(0);
     }
 }
