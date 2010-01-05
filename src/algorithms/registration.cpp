@@ -1,4 +1,5 @@
 #include "cv.h"
+#include "cvaux.h"
 #include "highgui.h"
 
 void PrintMat(const CvMat* A)  
@@ -127,7 +128,7 @@ int main( int argc, char** argv )
 	IplImage* src2;
     // the first command line parameter must be file name of binary
     // (black-n-white) image
-    if((src1=cvLoadImage("test1.png", 0))!= 0 && (src2=cvLoadImage("test2.png" ,0))!= 0)
+    if((src1=cvLoadImage("im1.jpg", 0))!= 0 && (src2=cvLoadImage("im2.jpg" ,0))!= 0)
     {
         int cols=src1->width;
 		int rows=src1->height;
@@ -182,10 +183,32 @@ int main( int argc, char** argv )
         cvAbsDiff(src1Mat, src2Mat, src2Mat);
         cvNamedWindow( "s2", 1 );
         cvShowImage( "s2", src2Mat);
+        
+		const int MAX_CORNERS = 100;
+		CvPoint2D32f corners[MAX_CORNERS] = {0};
+		int corner_count = MAX_CORNERS;
+		double quality_level = 0.1;
+		double min_distance = 5;
+		int eig_block_size = 3;
+		int use_harris = true;
+        cvGoodFeaturesToTrack(src2Mat, src1Mat, dst2Mat, corners,
+				&corner_count,
+				quality_level,
+				min_distance,
+				NULL,
+				eig_block_size,
+				use_harris);
+		for( int i = 0; i < corner_count; i++) {
+			int radius = 3;
+			cvCircle(src1,
+					cvPoint((int)(corners[i].x + 0.5f),(int)(corners[i].y + 0.5f)),
+					radius,
+					cvScalar(0,0,255));
+		}
 
-        cvAbsDiff(src1Mat, dst2Mat, dst2Mat);
+		//cvAbsDiff(src1Mat, dst2Mat, dst2Mat);
         cvNamedWindow( "d2", 1 );
-        cvShowImage( "d2", dst2Mat);
+        cvShowImage( "d2", src1);
        
 		cvWaitKey(0);
     }
