@@ -13,6 +13,7 @@ class IAlgorithmModel : public QObject
  public slots:	
 	virtual void input(IplImage*) =0; //
  signals:
-	void output(IplImage*);	
+	void output(IplImage*);
+	void output(CvSeq*, IplImage*);
 };
 #endif

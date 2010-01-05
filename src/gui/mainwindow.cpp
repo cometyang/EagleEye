@@ -1,7 +1,6 @@
 /*mian window*/
 #include <QtGui>
 #include "mainwindow.h"
-#include "movieviewer.h"
 #include "highgui.h"
 
 MainWindow::MainWindow()
@@ -145,13 +144,16 @@ void MainWindow::loadFile(const QString &filename)
     assert(camera);
     mainSource =new CvFrameSource(camera);
     algmodel= new CodeBook(mainSource->nextFrame());
+	trackerModel = new Tracker();
 
 	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
 	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+    connect(algmodel, SIGNAL(output(CvSeq*, IplImage*)), trackerModel, SLOT(input(CvSeq*, IplImage*)));
+    connect(trackerModel, SIGNAL(output(IplImage*)), tracker, SLOT(setIplImage(IplImage*)));
 
 	player->setSource(mainSource);
 	
-	tracker->setSource(mainSource);
+	
 	
     statusBar()->showMessage(tr("file loaded"), 2000);
 } 

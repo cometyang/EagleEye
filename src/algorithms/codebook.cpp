@@ -58,6 +58,10 @@ CodeBook::updateModel(IplImage* videoFrame)
 
         cvFindContours( mask, storage, &contour, sizeof(CvContour),
                       CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
+		emit
+		{
+		output(contour, videoFrame);
+		}
 		cvZero( dstFrame );
         for( ; contour != 0; contour = contour->h_next )
         {

@@ -29,7 +29,7 @@ set(EagleEye_SRCS
 	
 	# algorithm source
 	algorithms/codebook.cpp
-	
+	algorithms/tracker.cpp
 	# test source 
 	# test/sample1_unittest.cc
 		
@@ -43,12 +43,14 @@ set(EagleEye_MOCS
 	#core/cvmovie.h
     #gui/cvmovielabel.h
 	# gui header
+	
 	gui/mainwindow.h
 	gui/movieviewer.h
 	
 	# algorithm header
 	algorithms/ialgorithmmodel.h
 	algorithms/codebook.h
+	algorithms/tracker.h
 	)
 
 set(EagleEye_RCCS

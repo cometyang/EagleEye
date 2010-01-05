@@ -6,6 +6,7 @@
 #include <iostream>
 #include "movieviewer.h"
 #include "../algorithms/codebook.h"
+#include "../algorithms/tracker.h"
 
 using namespace std;
 
@@ -54,6 +55,7 @@ private:
 
 	IFrameSource* mainSource;
 	IAlgorithmModel* algmodel;
+	Tracker* trackerModel;
 	
     
 	QString curFile;
