@@ -50,31 +50,16 @@ CodeBook::updateModel(IplImage* videoFrame)
 		// Find foreground by codebook method
 		cvBGCodeBookDiff( model, yuvFrame, mask);
         
-        CvMemStorage* storage = cvCreateMemStorage(0);
-        CvSeq* contour = 0;
-         
         cvThreshold( mask, mask, 1, 255, CV_THRESH_BINARY );
         cvSegmentFGMask(mask);
 
-        cvFindContours( mask, storage, &contour, sizeof(CvContour),
-                      CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
 		emit
 		{
-		output(contour, videoFrame);
+		output(mask);
+		output(mask, videoFrame);
+	
 		}
-		cvZero( dstFrame );
-        for( ; contour != 0; contour = contour->h_next )
-        {
-            CvScalar color = CV_RGB( rand()&255, rand()&255, rand()&255 );
-            /* replace CV_FILLED with 1 to see the outlines */
-            cvDrawContours( dstFrame, contour, color, color, -1, CV_FILLED, 8 );
-			CvRect box = cvBoundingRect(contour);
-			cvRectangle(dstFrame, cvPoint(box.x,box.y), cvPoint(box.x+box.width, box.y+box.height), CV_RGB(255,0,0));
-        }
-		emit
-		{
-			output(dstFrame);
-		}
+		
 	}
 	nframes++;
 }

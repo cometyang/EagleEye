@@ -14,6 +14,7 @@ class IAlgorithmModel : public QObject
 	virtual void input(IplImage*) =0; //
  signals:
 	void output(IplImage*);
-	void output(CvSeq*, IplImage*);
+	void output(IplImage*, IplImage*);
+	
 };
 #endif

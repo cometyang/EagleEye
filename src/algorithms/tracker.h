@@ -1,8 +1,8 @@
 #ifndef TRACKER_H
 #define TRACKER_H
 #include "cv.h"
-#include "cvaux.h"
-#include "highgui.h"
+#include <highgui.h>
+#include <cvblob.h>
 #include <iostream>
 #include <QObject>
 
@@ -12,12 +12,16 @@ class Tracker : public QObject
 {
  Q_OBJECT
  public:
-    
+    Tracker(IplImage*);
  public slots:	
-	void input(CvSeq*, IplImage*); //
+	void input(IplImage*, IplImage*); //
  signals:
 	void output(IplImage*);
  private:
-	IplImage* dstFrame;
+	
+	IplImage* oFrame;
+	IplImage* labelImg;
+	CvTracks tracks;
+	
 };
 #endif

@@ -144,11 +144,11 @@ void MainWindow::loadFile(const QString &filename)
     assert(camera);
     mainSource =new CvFrameSource(camera);
     algmodel= new CodeBook(mainSource->nextFrame());
-	trackerModel = new Tracker();
+	trackerModel = new Tracker(mainSource->nextFrame());
 
 	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
 	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
-    connect(algmodel, SIGNAL(output(CvSeq*, IplImage*)), trackerModel, SLOT(input(CvSeq*, IplImage*)));
+    connect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
     connect(trackerModel, SIGNAL(output(IplImage*)), tracker, SLOT(setIplImage(IplImage*)));
 
 	player->setSource(mainSource);
