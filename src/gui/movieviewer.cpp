@@ -102,7 +102,7 @@ MovieViewer::stop()
       {
 	      setState(NotRunning);
           viewerTimer->stop(); 
-          viewerSource->reset();
+          if (viewerSource) viewerSource->reset();
        }    
 } 
 

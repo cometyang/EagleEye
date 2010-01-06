@@ -2,6 +2,7 @@
 #define TRACKER_H
 #include "cv.h"
 #include <highgui.h>
+#include <cvaux.h>
 #include <cvblob.h>
 #include <iostream>
 #include <QObject>
@@ -22,6 +23,9 @@ class Tracker : public QObject
 	IplImage* oFrame;
 	IplImage* labelImg;
 	CvTracks tracks;
-	
+	CvBlobSeq* newBlobList; 
+	CvBlobSeq* blobList;
+	int nextBlobID;
+	CvBlobDetector* blobDetect;
 };
 #endif
