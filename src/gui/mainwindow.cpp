@@ -185,6 +185,7 @@ void MainWindow::loadFile(const QString &filename)
 	
 	
 	
+	
     statusBar()->showMessage(tr("file loaded"), 2000);
 } 
 

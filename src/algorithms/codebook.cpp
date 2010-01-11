@@ -20,11 +20,11 @@ CodeBook::initialModel(IplImage* videoFrame)
   
   model= cvCreateBGCodeBookModel();
   //Set color thresholds to default values
-  model->modMin[0] = 3;
-  model->modMin[1] = model->modMin[2] = 3;
-  model->modMax[0] = 10;
-  model->modMax[1] = model->modMax[2] = 10;
-  model->cbBounds[0] = model->cbBounds[1] = model->cbBounds[2] = 10;
+  model->modMin[0] = 30;
+  model->modMin[1] = model->modMin[2] = 30;
+  model->modMax[0] = 100;
+  model->modMax[1] = model->modMax[2] = 100;
+  model->cbBounds[0] = model->cbBounds[1] = model->cbBounds[2] = 100;
 
   yuvFrame = cvCloneImage(videoFrame);
   dstFrame = cvCloneImage(videoFrame);

@@ -57,7 +57,26 @@ set(EagleEye_MOCS
 	algorithms/tracker.h
 	algorithms/edge.h
 	)
-
+	
+set(EagleEye_HEADERS
+	# core header
+	core/iframesource.h
+	core/cvframesource.h
+	#gui/movieplayer.h
+	#core/cvmovie.h
+    #gui/cvmovielabel.h
+	# gui header
+	
+	gui/mainwindow.h
+	gui/movieviewer.h
+	
+	# algorithm header
+	algorithms/ialgorithmmodel.h
+	algorithms/codebook.h
+	algorithms/tracker.h
+	algorithms/edge.h
+	)
+	
 set(EagleEye_RCCS
 	# resource
 	resources/application.qrc
@@ -70,7 +89,7 @@ ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 QT4_ADD_RESOURCES(EagleEye_RCC_SRCS ${EagleEye_RCCS})
 QT4_WRAP_CPP(EagleEye_MOC_SRCS ${EagleEye_MOCS})
 
-ADD_EXECUTABLE(EagleEye ${EagleEye_SRCS} ${EagleEye_MOC_SRCS} ${EagleEye_RCC_SRCS}) 
+ADD_EXECUTABLE(EagleEye ${EagleEye_SRCS} ${EagleEye_MOC_SRCS} ${EagleEye_RCC_SRCS} ${EagleEye_HEADERS}) 
 
 TARGET_LINK_LIBRARIES(EagleEye 
 	${QT_LIBRARIES} 
