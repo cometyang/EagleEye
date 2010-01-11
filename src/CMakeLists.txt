@@ -33,6 +33,7 @@ set(EagleEye_SRCS
 	# algorithm source
 	algorithms/codebook.cpp
 	algorithms/tracker.cpp
+	algorithms/edge.cpp
 	# test source 
 	# test/sample1_unittest.cc
 		
@@ -54,6 +55,7 @@ set(EagleEye_MOCS
 	algorithms/ialgorithmmodel.h
 	algorithms/codebook.h
 	algorithms/tracker.h
+	algorithms/edge.h
 	)
 
 set(EagleEye_RCCS

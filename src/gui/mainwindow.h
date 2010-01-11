@@ -7,6 +7,7 @@
 #include "movieviewer.h"
 #include "../algorithms/codebook.h"
 #include "../algorithms/tracker.h"
+#include "../algorithms/edge.h"
 
 using namespace std;
 
@@ -32,6 +33,7 @@ private slots:
     void open();
     void edge();
     void gmmbs();
+	void codebook();
     void about();
    
 
@@ -73,6 +75,7 @@ private:
     QAction *exitAct;
     QAction *edgeAct;
     QAction *gmmbsAct;
+	QAction *codebookAct;
     
     QAction *aboutAct;
     QAction *aboutQtAct;

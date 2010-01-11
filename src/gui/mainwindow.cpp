@@ -37,17 +37,42 @@ void MainWindow::about()
 } 
 
 void MainWindow::edge()
- { 
+{ 
 
- // center->myAlgorithm=EDGE;
+	disconnect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	disconnect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+    disconnect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
+    
+	delete algmodel;
+	algmodel= new Edge(mainSource->nextFrame());
+	
+	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+   // connect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
+
 
 } 
 
 void MainWindow::gmmbs()
- { 
+{ 
   
   // center->myAlgorithm=GMMBS;
 }
+
+void MainWindow::codebook()
+{
+	disconnect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	disconnect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+    disconnect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
+    
+	delete algmodel;
+	algmodel= new CodeBook(mainSource->nextFrame());
+	
+	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+    connect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
+}
+
 void MainWindow::createActions()
  { 
 
@@ -68,6 +93,10 @@ void MainWindow::createActions()
     gmmbsAct = new QAction(tr("gmmbs"),this);
     gmmbsAct->setStatusTip(tr("gmmbs")); 
     connect(gmmbsAct, SIGNAL(triggered()), this, SLOT(gmmbs()));
+
+	codebookAct = new QAction(tr("codebook"),this);
+    codebookAct->setStatusTip(tr("codebook")); 
+    connect(codebookAct, SIGNAL(triggered()), this, SLOT(codebook()));
 
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -90,6 +119,7 @@ void MainWindow::createMenus()
     algorithmMenu = menuBar()->addMenu(tr("&Algorithm"));  
     algorithmMenu->addAction(edgeAct);
     algorithmMenu->addAction(gmmbsAct);
+	algorithmMenu->addAction(codebookAct);
 
 	menuBar()->addSeparator();
     viewMenu = menuBar()->addMenu(tr("&View")); 
