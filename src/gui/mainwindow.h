@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include "movieviewer.h"
+#include "tabdialog.h"
 #include "../algorithms/codebook.h"
 #include "../algorithms/tracker.h"
 #include "../algorithms/edge.h"
@@ -54,6 +55,7 @@ private:
 	MovieViewer *detector;
 	MovieViewer *tracker;
 	
+	TabDialog* tabdialog;
 
 	IFrameSource* mainSource;
 	IAlgorithmModel* algmodel;

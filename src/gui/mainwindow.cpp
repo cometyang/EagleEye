@@ -175,6 +175,8 @@ void MainWindow::loadFile(const QString &filename)
     mainSource =new CvFrameSource(camera);
     algmodel= new CodeBook(mainSource->nextFrame());
 	trackerModel = new Tracker(mainSource->nextFrame());
+	tabdialog = new TabDialog(filename);
+    tabdialog->show();
 
 	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
 	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));

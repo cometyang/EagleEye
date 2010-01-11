@@ -25,6 +25,7 @@ set(EagleEye_SRCS
 	# gui source
 	gui/mainwindow.cpp
 	gui/movieviewer.cpp
+	gui/tabdialog.cpp
 	#gui/movieplayer.cpp
 	#gui/cvmovielabel.cpp 
 	
@@ -50,6 +51,7 @@ set(EagleEye_MOCS
 	
 	gui/mainwindow.h
 	gui/movieviewer.h
+	gui/tabdialog.h
 	
 	# algorithm header
 	algorithms/ialgorithmmodel.h
@@ -69,6 +71,7 @@ set(EagleEye_HEADERS
 	
 	gui/mainwindow.h
 	gui/movieviewer.h
+	gui/tabdialog.h
 	
 	# algorithm header
 	algorithms/ialgorithmmodel.h

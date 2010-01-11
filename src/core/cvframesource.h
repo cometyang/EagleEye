@@ -21,9 +21,6 @@ class CvFrameSource : public IFrameSource
 		int getFramePosition() const;
 		IplImage* setFramePosition(int);
 		
-
-	
-
 	private:
 		CvCapture* sourceCapture;
 		IplImage* nextIplImage;
