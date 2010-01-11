@@ -36,7 +36,7 @@ CvLabel cvGreaterBlob(const CvBlobs &blobs)
   
   for (CvBlobs::const_iterator it=blobs.begin();it!=blobs.end();++it)
   {
-    CvBlob *blob=(*it).second;
+    EagleCvBlob *blob=(*it).second;
     //if ((!blob->_parent)&&(blob->area>maxArea))
     if (blob->area>maxArea)
     {
@@ -53,7 +53,7 @@ void cvFilterByArea(CvBlobs &blobs, unsigned int minArea, unsigned int maxArea)
   CvBlobs::iterator it=blobs.begin();
   while(it!=blobs.end())
   {
-    CvBlob *blob=(*it).second;
+    EagleCvBlob *blob=(*it).second;
     if ((blob->area<minArea)||(blob->area>maxArea))
     {
       delete blob;
@@ -66,7 +66,7 @@ void cvFilterByArea(CvBlobs &blobs, unsigned int minArea, unsigned int maxArea)
   }
 }
 
-void cvCentralMoments(CvBlob *blob, const IplImage *img)
+void cvCentralMoments(EagleCvBlob *blob, const IplImage *img)
 {
   CV_FUNCNAME("cvCentralMoments");
   __CV_BEGIN__;
@@ -230,7 +230,7 @@ void cvRenderBlobs(const IplImage *imgLabel, const CvBlobs &blobs, IplImage *img
   {
     for (CvBlobs::const_iterator it=blobs.begin(); it!=blobs.end(); ++it)
     {
-      CvBlob *blob=(*it).second;
+      EagleCvBlob *blob=(*it).second;
 
       if (mode&CV_BLOB_RENDER_TO_LOG)
       {
@@ -282,7 +282,7 @@ void cvRenderBlobs(const IplImage *imgLabel, const CvBlobs &blobs, IplImage *img
 }
 
 // Returns radians
-double cvAngle(CvBlob *blob)
+double cvAngle(EagleCvBlob *blob)
 {
   CV_FUNCNAME("cvAngle");
   __CV_BEGIN__;

@@ -34,7 +34,7 @@ using namespace std;
 
 #define MIN8(a,b,c,d,e,f,g,h) MIN((a),MIN((b),MIN((c),MIN((d),MIN((e),MIN((f),MIN((g),(h))))))))
 
-double distantBlobTrack(CvBlob const *b, CvTrack const *t)
+double distantBlobTrack(EagleCvBlob const *b, CvTrack const *t)
 {
   if (((b->centroid.x>=t->minx)&&(b->centroid.x<=(t->maxx))&&
 	(b->centroid.y>=t->miny)&&(b->centroid.y<=(t->maxy)))||
@@ -126,7 +126,7 @@ void cvUpdateTracks(CvBlobs &b, CvTracks &t, const double thDistance, const unsi
 	for (i=0; (i<nBlobs)&&(!C(i, j)); i++) {}
 
 	// Update track
-	CvBlob *blob = B(i);
+	EagleCvBlob *blob = B(i);
 	CvTrack *track = T(j);
 	track->label = blob->label;
 	track->centroid = blob->centroid;
@@ -149,7 +149,7 @@ void cvUpdateTracks(CvBlobs &b, CvTracks &t, const double thDistance, const unsi
 	  if (C(i, j))
 	  {
 	    maxTrackID++;
-	    CvBlob *blob = B(i);
+	    EagleCvBlob *blob = B(i);
 	    CvTrack *track = new CvTrack;
 	    track->id = maxTrackID;
 	    track->label = blob->label;
@@ -182,7 +182,7 @@ void cvUpdateTracks(CvBlobs &b, CvTracks &t, const double thDistance, const unsi
       {
 	// New track
 	maxTrackID++;
-	CvBlob *blob = B(i);
+	EagleCvBlob *blob = B(i);
 	CvTrack *track = new CvTrack;
 	track->id = maxTrackID;
 	track->label = blob->label;
@@ -200,7 +200,7 @@ void cvUpdateTracks(CvBlobs &b, CvTracks &t, const double thDistance, const unsi
 	
 	// New track
 	maxTrackID++;
-	CvBlob *blob = B(i);
+	EagleCvBlob *blob = B(i);
 	CvTrack *track = new CvTrack;
 	track->id = maxTrackID;
 	track->label = blob->label;

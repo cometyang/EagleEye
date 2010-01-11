@@ -36,13 +36,13 @@ using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Based on http://en.wikipedia.org/wiki/Disjoint-set_data_structure
-void makeSet(CvBlob *x)
+void makeSet(EagleCvBlob *x)
 {
   x->_parent=NULL;
   x->_rank=0;
 }
 
-CvBlob *find(CvBlob *x)
+EagleCvBlob *find(EagleCvBlob *x)
 {
   if (!x->_parent) return x;
   else
@@ -52,10 +52,10 @@ CvBlob *find(CvBlob *x)
   }
 }
 
-void merge(CvBlob *x, CvBlob *y)
+void merge(EagleCvBlob *x, EagleCvBlob *y)
 {
-  CvBlob *xRoot=find(x);
-  CvBlob *yRoot=find(y);
+  EagleCvBlob *xRoot=find(x);
+  EagleCvBlob *yRoot=find(y);
   
   if (xRoot->_rank > yRoot->_rank)
     yRoot->_parent=xRoot;
@@ -114,7 +114,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
     {
       label++;
 
-      CvBlob *blob=new CvBlob;
+      EagleCvBlob *blob=new EagleCvBlob;
       makeSet(blob);
       blob->label=label;
       blob->area=1;
@@ -137,7 +137,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 	numPixels++;
 	if (imgDataOut[c-1])
 	{
-	  CvBlob *blob=blobs[imgDataOut[c-1]];
+	  EagleCvBlob *blob=blobs[imgDataOut[c-1]];
 	  blob->area+=1;
 	  blob->maxx=_MAX_(blob->maxx,c);
 	  blob->m10+=c; blob->m01+=0;
@@ -150,7 +150,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 	{
 	  label++;
 
-	  CvBlob *blob=new CvBlob;
+	  EagleCvBlob *blob=new EagleCvBlob;
 	  makeSet(blob);
 	  blob->label=label;
 	  blob->area=1;
@@ -180,7 +180,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 	numPixels++;
 	if (lastRowOut[0])
 	{
-	  CvBlob *blob=blobs[lastRowOut[0]];
+	  EagleCvBlob *blob=blobs[lastRowOut[0]];
 	  blob->area+=1;
 	  blob->maxy=_MAX_(blob->maxy,r);
 	  blob->m10+=0; blob->m01+=r;
@@ -193,7 +193,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 	{
 	  label++;
 
-	  CvBlob *blob=new CvBlob;
+	  EagleCvBlob *blob=new EagleCvBlob;
 	  makeSet(blob);
 	  blob->label=label;
 	  blob->area=1;
@@ -216,7 +216,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 	  numPixels++;
 	  if (lastRowOut[c])
 	  {
-	    CvBlob *blob=blobs[lastRowOut[c]];
+	    EagleCvBlob *blob=blobs[lastRowOut[c]];
 	    blob->area+=1;
 	    blob->maxy=_MAX_(blob->maxy,r);
 	    blob->m10+=c; blob->m01+=r;
@@ -227,15 +227,15 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 
 	    if ((imgDataOut[c-1])&&(imgDataOut[c]!=imgDataOut[c-1]))
 	    {
-	      CvBlob *blob1=blobs[imgDataOut[c]];
-	      CvBlob *blob2=blobs[imgDataOut[c-1]];
+	      EagleCvBlob *blob1=blobs[imgDataOut[c]];
+	      EagleCvBlob *blob2=blobs[imgDataOut[c-1]];
 
 	      merge(blob1,blob2);
 	    }
 	  }
 	  else if (imgDataOut[c-1])
 	  {
-	    CvBlob *blob=blobs[imgDataOut[c-1]];
+	    EagleCvBlob *blob=blobs[imgDataOut[c-1]];
 	    blob->area+=1;
 	    blob->maxx=_MAX_(blob->maxx,c);
 	    blob->m10+=c; blob->m01+=r;
@@ -248,7 +248,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 	  {
 	    label++;
 
-	    CvBlob *blob=new CvBlob;
+	    EagleCvBlob *blob=new EagleCvBlob;
 	    makeSet(blob);
 	    blob->label=label;
 	    blob->area=1;
@@ -272,8 +272,8 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
 
     for (CvBlobs::iterator it=blobs.begin();it!=blobs.end();++it)
     {
-      CvBlob *blob1=(*it).second;
-      CvBlob *blob2=find(blob1);
+      EagleCvBlob *blob1=(*it).second;
+      EagleCvBlob *blob2=find(blob1);
 
       if (blob1!=blob2)
       {
@@ -299,7 +299,7 @@ unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs)
     CvBlobs::iterator it=blobs.begin();
     while (it!=blobs.end())
     {
-      CvBlob *blob=(*it).second;
+      EagleCvBlob *blob=(*it).second;
       if (blob->_parent)
       {
 	delete blob;

@@ -60,7 +60,7 @@ extern "C" {
   typedef unsigned int CvID;
 
   /// \brief Struct that contain information about one blob.
-  struct CvBlob
+  struct  EagleCvBlob
   {
     CvLabel label; ///< Label assigned to the blob.
     
@@ -89,23 +89,23 @@ extern "C" {
     double u02; ///< Central moment 02.
     
     /// Parent of the union-find data estructure.
-    CvBlob *_parent;
+     EagleCvBlob *_parent;
     /// Rank of the union-find data estructure.
     unsigned int _rank;
   };
   
-  /// \var typedef std::map<CvLabel,CvBlob *> CvBlobs
+  /// \var typedef std::map<CvLabel,EagleCvBlob *> CvBlobs
   /// \brief List of blobs.
   /// A map is used to access each blob from its label number.
   /// \see CvLabel
-  /// \see CvBlob
-  typedef std::map<CvLabel,CvBlob *> CvBlobs;
+  /// \see EagleCvBlob
+  typedef std::map<CvLabel,EagleCvBlob *> CvBlobs;
 
-  /// \var typedef std::pair<CvLabel,CvBlob *> CvLabelBlob
+  /// \var typedef std::pair<CvLabel,EagleCvBlob *> CvLabelBlob
   /// \brief Pair (label, blob).
   /// \see CvLabel
-  /// \see CvBlob
-  typedef std::pair<CvLabel,CvBlob *> CvLabelBlob;
+  /// \see EagleCvBlob
+  typedef std::pair<CvLabel, EagleCvBlob *> CvLabelBlob;
   
   /// \fn unsigned int cvLabel (IplImage *img, IplImage *imgOut, CvBlobs &blobs);
   /// \brief Label the connected parts of a binary image.
@@ -133,7 +133,7 @@ extern "C" {
   {
     for (CvBlobs::iterator it=blobs.begin(); it!=blobs.end(); it++)
     {
-      CvBlob *blob = (*it).second;
+       EagleCvBlob *blob = (*it).second;
       if (blob) delete blob;
     }
 
@@ -155,34 +155,34 @@ extern "C" {
   /// \param maxArea Maximun area.
   void cvFilterByArea(CvBlobs &blobs, unsigned int minArea, unsigned int maxArea);
 
-  /// \fn inline CvPoint2D64f cvCentroid(CvBlob *blob)
+  /// \fn inline CvPoint2D64f cvCentroid(EagleCvBlob *blob)
   /// \brief Calculates centroid.
   /// Centroid will be returned and stored in the blob structure.
   /// \param blob Blob whose centroid will be calculated.
   /// \return Centroid.
-  /// \see CvBlob
-  inline CvPoint2D64f cvCentroid(CvBlob *blob)
+  /// \see EagleCvBlob
+  inline CvPoint2D64f cvCentroid(EagleCvBlob *blob)
   {
     return blob->centroid=cvPoint2D64f(blob->m10/blob->area, blob->m01/blob->area);
   }
 
-  /// \fn void cvCentralMoments(CvBlob *blob, const IplImage *img)
+  /// \fn void cvCentralMoments(EagleCvBlob *blob, const IplImage *img)
   /// \brief Calculates central moment for a blob.
   /// Central moments will be stored in blob structure.
   /// \param blob Blob.
   /// \param img Label image (depth=IPL_DEPTH_LABEL and num. channels=1).
-  /// \see CvBlob
+  /// \see EagleCvBlob
   /// \see cvLabel
-  void cvCentralMoments(CvBlob *blob, const IplImage *img);
+  void cvCentralMoments(EagleCvBlob *blob, const IplImage *img);
 
-  /// \fn double cvAngle(CvBlob *blob)
+  /// \fn double cvAngle(EagleCvBlob *blob)
   /// \brief Calculates angle orientation of a blob.
   /// This function uses central moments so cvCentralMoments should have been called before for this blob.
   /// \param blob Blob.
   /// \return Angle orientation in radians.
   /// \see cvCentralMoments
-  /// \see CvBlob
-  double cvAngle(CvBlob *blob);
+  /// \see EagleCvBlob
+  double cvAngle(EagleCvBlob *blob);
   
 #define CV_BLOB_RENDER_COLOR            0x0001 ///< Render each blog with a different color. \see cvRenderBlobs
 #define CV_BLOB_RENDER_CENTROID         0x0002 ///< Render centroid. \see cvRenderBlobs
@@ -207,12 +207,12 @@ extern "C" {
   /// \see CV_BLOB_RENDER_TO_STD
   void cvRenderBlobs(const IplImage *imgLabel, const CvBlobs &blobs, IplImage *imgSource, IplImage *imgDest, unsigned short mode=0x000f, double alpha=1.);
 
-  /// \fn void cvSetImageROItoBlob(IplImage *img, CvBlob const *blob)
+  /// \fn void cvSetImageROItoBlob(IplImage *img, EagleCvBlob const *blob)
   /// \brief Set the ROI of an image to the bounding box of a blob.
   /// \param img Image.
   /// \param blob Blob.
-  /// \see CvBlob
-  inline void cvSetImageROItoBlob(IplImage *img, CvBlob const *blob)
+  /// \see EagleCvBlob
+  inline void cvSetImageROItoBlob(IplImage *img, EagleCvBlob const *blob)
   {
     cvSetImageROI(img, cvRect(blob->minx, blob->miny, blob->maxx-blob->minx, blob->maxy-blob->miny));
   };
@@ -313,15 +313,15 @@ extern "C" {
   /// \brief Polygon based contour.
   typedef std::vector<CvPoint> CvContourPolygon;
 
-  /// \var CvContourChainCode *cvGetContour(CvBlob const *blob, IplImage const *img)
+  /// \var CvContourChainCode *cvGetContour(EagleCvBlob const *blob, IplImage const *img)
   /// \brief Get the contour of a blob.
   /// Uses Theo Pavlidis' algorithm (see http://www.imageprocessingplace.com/downloads_V3/root_downloads/tutorials/contour_tracing_Abeer_George_Ghuneim/theo.html).
   /// \param blob Blob.
   /// \param img Label image.
   /// \return Chain code contour.
   /// \see CvContourChainCode
-  /// \see CvBlob
-  CvContourChainCode *cvGetContour(CvBlob const *blob, IplImage const *img);
+  /// \see EagleCvBlob
+  CvContourChainCode *cvGetContour(EagleCvBlob const *blob, IplImage const *img);
 
   /// \var void cvRenderContourChainCode(CvContourChainCode const *contour, IplImage const *img, CvScalar const &color=CV_RGB(255, 255, 255))
   /// \brief Draw a contour.

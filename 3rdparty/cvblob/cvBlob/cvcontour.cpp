@@ -35,7 +35,7 @@ const char moves[4][3][4] = { { {-1, -1, 3, CV_CHAINCODE_UP_LEFT   }, { 0, -1, 0
 			      { {-1,  1, 2, CV_CHAINCODE_DOWN_LEFT }, {-1,  0, 3, CV_CHAINCODE_LEFT }, {-1, -1, 3, CV_CHAINCODE_UP_LEFT   } }
 		            };
 
-CvContourChainCode *cvGetContour(CvBlob const *blob, IplImage const *img)
+CvContourChainCode *cvGetContour(EagleCvBlob const *blob, IplImage const *img)
 {
   CV_FUNCNAME("cvGetContour");
   __CV_BEGIN__;
