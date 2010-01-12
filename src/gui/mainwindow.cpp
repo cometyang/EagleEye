@@ -33,7 +33,9 @@ void MainWindow::open()
 }
 void MainWindow::about()
 { 
-	QMessageBox::about(this, tr("About Application"), tr("MSU Motion Detection."));
+	QMessageBox::about(this, tr("About"), tr("<h4><i>Motion Detection Application</i></h4>"
+		      "<h4><font color=maroon>Mississippi State University </font></h4>"
+		      "<h4><font color=red>Author: He Yang </font></h4>"));
 } 
 
 void MainWindow::edge()
