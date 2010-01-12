@@ -17,26 +17,18 @@
 # along with cvBlob.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
-include_directories(${OpenCV_INCLUDE_DIR})
-
-set(cvBlob_CVBLOB cvblob.cpp
-                   cvlabel.cpp
+set(EagleCvBlob_SRCS
+		   cvblob.cpp
+           cvlabel.cpp
 		   cvaux.cpp
 		   cvcontour.cpp
 		   cvtrack.cpp
 )
 
-set_source_files_properties(${cvBlob_SRC}
-                            PROPERTIES
-                            COMPILE_FLAGS "-O3"
+set(EagleCvBlob_HEADERS
+		   cvblob.h
 )
 
-add_library(cvblob ${cvBlob_CVBLOB})
-
-install(TARGETS cvblob
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib/static
-)
+add_library(ecvblob STATIC ${EagleCvBlob_SRCS} ${EagleCvBlob_HEADERS})

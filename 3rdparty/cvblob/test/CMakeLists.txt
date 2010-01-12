@@ -17,45 +17,23 @@
 # along with cvBlob.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-find_package(OpenCV REQUIRED)
 
-include_directories(${OpenCV_INCLUDE_DIR})
-include_directories(${cvBlob_SOURCE_DIR}/cvBlob)
+include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${ecvblob_SOURCE_DIR}/cvBlob)
 
 # TEST
 set(TEST_SRC test.cpp)
 
-set_source_files_properties(${TEST_SRC}
-                            PROPERTIES
-                            COMPILE_FLAGS "-O3"
-)
-
 add_executable(test ${TEST_SRC})
 
-target_link_libraries(test cvblob)
+target_link_libraries(test ecvblob)
 target_link_libraries(test ${OpenCV_LIBRARIES})
 
-install(TARGETS test
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib/static
-)
 
 # TEST TRACKING
 set(TEST_TRACKING_SRC test_tracking.cpp)
 
-set_source_files_properties(${TEST_TRACKING_SRC}
-                            PROPERTIES
-                            COMPILE_FLAGS "-O3"
-)
-
 add_executable(test_tracking ${TEST_TRACKING_SRC})
 
-target_link_libraries(test_tracking cvblob)
+target_link_libraries(test_tracking ecvblob)
 target_link_libraries(test_tracking ${OpenCV_LIBRARIES})
-
-install(TARGETS test_tracking
-        RUNTIME DESTINATION bin
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib/static
-)

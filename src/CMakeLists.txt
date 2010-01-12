@@ -6,8 +6,6 @@ INCLUDE_DIRECTORIES(
 	#${GTEST_INCLUDE_DIRS}
 	)
 
-link_directories(${PROJECT_SOURCE_DIR}/libs/cvblob)	
-
 IF(WIN32)
 IF(CMAKE_C_FLAGS_RELEASE )
 SET(SUBSYSTEM WIN32)
@@ -98,7 +96,7 @@ TARGET_LINK_LIBRARIES(EagleEye
 	${QT_LIBRARIES} 
 	${OpenCV_LIBRARIES} 
 	${GTEST_BOTH_LIBRARIES}
-	cvblob 
+	ecvblob 
 	) 
 	
 
