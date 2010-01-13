@@ -88,7 +88,7 @@ set(EagleEye_RCCS
 	# resource
 	resources/application.qrc
 	)
-
+ADD_SUBDIRECTORY(cuda)
 # Declare the target (an executable)
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
@@ -103,6 +103,7 @@ TARGET_LINK_LIBRARIES(EagleEye
 	${OpenCV_LIBRARIES} 
 	${GTEST_BOTH_LIBRARIES}
 	ecvblob 
+        ECuda
 	) 
 	
 
