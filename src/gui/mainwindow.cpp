@@ -2,6 +2,7 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "highgui.h"
+#include "cuda/cudaTest.h"
 
 MainWindow::MainWindow()
  {
@@ -15,7 +16,7 @@ MainWindow::MainWindow()
 	setUnifiedTitleAndToolBarOnMac(true);
     setAnimated(true);
     setDockNestingEnabled (true);
-    
+	runTestCuda();    
 	resize(300, 400);
    
 }
