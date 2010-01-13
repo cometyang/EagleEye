@@ -18,6 +18,7 @@ set(EagleEye_SRCS
     main.cpp
 	# core source
 	core/cvframesource.cpp
+
 	
 	
 	# gui source
@@ -33,6 +34,7 @@ set(EagleEye_SRCS
 	algorithms/codebook.cpp
 	algorithms/tracker.cpp
 	algorithms/edge.cpp
+	algorithms/mhi.cpp
 	# test source 
 	# test/sample1_unittest.cc
 		
@@ -56,6 +58,8 @@ set(EagleEye_MOCS
 	algorithms/codebook.h
 	algorithms/tracker.h
 	algorithms/edge.h
+	algorithms/mhi.h
+	
 	)
 	
 set(EagleEye_HEADERS
@@ -76,6 +80,8 @@ set(EagleEye_HEADERS
 	algorithms/codebook.h
 	algorithms/tracker.h
 	algorithms/edge.h
+	algorithms/mhi.h
+
 	)
 	
 set(EagleEye_RCCS
@@ -115,5 +121,5 @@ INSTALL(FILES  ${OpenCV_LIBRARIES} DESTINATION bin)
 INSTALL(FILES  ${QT_QTCORE_LIBRARY} DESTINATION bin)
 INSTALL(FILES  ${QT_QTGUI_LIBRARY} DESTINATION bin)
 
-#GTEST_ADD_TESTS(${EXECUTABLE_OUTPUT_PATH}/EagleEye "" test/sample1_unittest.cc)
+#GTEST_A DD_TESTS(${EXECUTABLE_OUTPUT_PATH}/EagleEye "" test/sample1_unittest.cc)
 #ADD_TEST(AllTestsInEagleEye ${EXECUTABLE_OUTPUT_PATH}/EagleEye)

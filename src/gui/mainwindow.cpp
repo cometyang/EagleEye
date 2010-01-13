@@ -34,7 +34,9 @@ void MainWindow::open()
 }
 void MainWindow::about()
 { 
-	QMessageBox::about(this, tr("About Application"), tr("MSU Motion Detection."));
+	QMessageBox::about(this, tr("About"), tr("<h4><i>Motion Detection Application</i></h4>"
+		      "<h4><font color=maroon>Mississippi State University </font></h4>"
+		      "<h4><font color=red>Author: He Yang </font></h4>"));
 } 
 
 void MainWindow::edge()
@@ -54,6 +56,22 @@ void MainWindow::edge()
 
 } 
 
+void MainWindow::mhi()
+{ 
+
+	disconnect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	disconnect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+    disconnect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
+    
+	delete algmodel;
+	algmodel= new MHI(mainSource->nextFrame());
+	
+	connect(mainSource, SIGNAL(updated(IplImage*)), algmodel, SLOT(input(IplImage*)));
+	connect(algmodel, SIGNAL(output(IplImage*)), detector, SLOT(setIplImage(IplImage*)));
+    connect(algmodel, SIGNAL(output(IplImage*, IplImage*)), trackerModel, SLOT(input(IplImage*, IplImage*)));
+
+
+} 
 void MainWindow::gmmbs()
 { 
   
@@ -91,9 +109,9 @@ void MainWindow::createActions()
     edgeAct->setStatusTip(tr("edge")); 
     connect(edgeAct, SIGNAL(triggered()), this, SLOT(edge()));
 
-    gmmbsAct = new QAction(tr("gmmbs"),this);
-    gmmbsAct->setStatusTip(tr("gmmbs")); 
-    connect(gmmbsAct, SIGNAL(triggered()), this, SLOT(gmmbs()));
+    mhiAct = new QAction(tr("mhi"),this);
+    mhiAct->setStatusTip(tr("mhi")); 
+    connect(mhiAct, SIGNAL(triggered()), this, SLOT(mhi()));
 
 	codebookAct = new QAction(tr("codebook"),this);
     codebookAct->setStatusTip(tr("codebook")); 
@@ -119,7 +137,7 @@ void MainWindow::createMenus()
     menuBar()->addSeparator();
     algorithmMenu = menuBar()->addMenu(tr("&Algorithm"));  
     algorithmMenu->addAction(edgeAct);
-    algorithmMenu->addAction(gmmbsAct);
+    algorithmMenu->addAction(mhiAct);
 	algorithmMenu->addAction(codebookAct);
 
 	menuBar()->addSeparator();

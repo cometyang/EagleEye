@@ -9,6 +9,7 @@
 #include "../algorithms/codebook.h"
 #include "../algorithms/tracker.h"
 #include "../algorithms/edge.h"
+#include "../algorithms/mhi.h"
 
 using namespace std;
 
@@ -33,9 +34,11 @@ private slots:
   
     void open();
     void edge();
-    void gmmbs();
+    void mhi();
+	void gmmbs();
 	void codebook();
     void about();
+
    
 
 private:
@@ -77,6 +80,7 @@ private:
     QAction *exitAct;
     QAction *edgeAct;
     QAction *gmmbsAct;
+	QAction *mhiAct;
 	QAction *codebookAct;
     
     QAction *aboutAct;
